@@ -6,9 +6,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RabbitRepositoryImpl implements RabbitRepository {
+    @Override
+    public void notify(BillingEntity saved) {
+
+    }
 
     @Override
-    public void send(BillingEntity entity) {
+    public void sendToPay(BillingEntity saved) {
 
     }
 }
