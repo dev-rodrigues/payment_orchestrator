@@ -3,6 +3,7 @@ package br.com.devrodrigues.orchestrator.entrypoint.http;
 import br.com.devrodrigues.orchestrator.core.PaymentRequest;
 import br.com.devrodrigues.orchestrator.core.PaymentType;
 import br.com.devrodrigues.orchestrator.service.Orchestrator;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +21,7 @@ public class Test {
     }
 
     @GetMapping
-    public void test() {
+    public void test() throws JsonProcessingException {
         orchestrator.execute(
                 new PaymentRequest(
                         "123",

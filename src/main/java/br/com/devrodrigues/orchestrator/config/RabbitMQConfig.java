@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
+    @Value("${queue.beta.request}")
+    private String paymentRequest;
+
     @Value("${queue.intra.payment.slip.name}")
     private String slipQueueName;
 
@@ -20,11 +23,16 @@ public class RabbitMQConfig {
     @Value("${queue.intra.payment.credit-card.name}")
     private String creditCardQueueName;
 
-    @Value("${queue.intra.payment.credit-card.routing-key}")
+    @Value("w${queue.intra.payment.credit-card.routing-key}")
     private String creditCardQueueRoutingKey;
 
     @Value("${queue.intra.exchange}")
     public String exchangeName;
+
+    @Bean
+    public Queue paymentRequestQueue() {
+        return new Queue(paymentRequest, true);
+    }
 
     @Bean
     public Queue slipQueue() {

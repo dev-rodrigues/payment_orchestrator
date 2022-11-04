@@ -4,13 +4,14 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static javax.persistence.GenerationType.AUTO;
 
 @Entity(name = "billing")
-public class BillingEntity {
+public class BillingEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = AUTO)

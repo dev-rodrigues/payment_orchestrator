@@ -5,6 +5,7 @@ import br.com.devrodrigues.orchestrator.core.PaymentRequest;
 import br.com.devrodrigues.orchestrator.core.build.BillingBuilder;
 import br.com.devrodrigues.orchestrator.repository.BillingRepository;
 import br.com.devrodrigues.orchestrator.repository.RabbitRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -34,9 +35,9 @@ public class Orchestrator {
 
     }
 
-    public void execute(PaymentRequest request) {
-        var entity = BillingBuilder
-                .builder(gson)
+    public void execute(PaymentRequest request) throws JsonProcessingException {
+        var result = BillingBuilder
+                .builder()
                 .possibleRoutings(asList(creditCardRoutingKey, slipRoutingKey))
                 .withOrderId(request.orderId())
                 .withPayment(request.paymentType())
@@ -45,13 +46,13 @@ public class Orchestrator {
                 .withValue(request.value())
                 .buildStarter();
 
-        var saved = billingRepository.store(entity.getFirst());
+        var response = billingRepository.store(result.getFirst());
 
         rabbitRepository.producer(
                 new IntraQueue(
                         exchangeName,
-                        entity.getSecond().getRoutingKey(),
-                        gson.toJson(saved)
+                        result.getSecond().getRoutingKey(),
+                        response
                 )
         );
     }

@@ -18,7 +18,6 @@ import static java.time.LocalDateTime.now;
 public class BillingBuilder {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final Gson gson;
     private String userId;
     private String orderId;
     private PaymentType paymentType;
@@ -27,12 +26,11 @@ public class BillingBuilder {
     private String routingKey;
     private List<String> possibleRoutings;
 
-    private BillingBuilder(Gson gson) {
-        this.gson = gson;
+    private BillingBuilder() {
     }
 
-    public static BillingBuilder builder(Gson gson) {
-        return new BillingBuilder(gson);
+    public static BillingBuilder builder() {
+        return new BillingBuilder();
     }
 
     public BillingBuilder withUser(String userId) {
@@ -104,9 +102,5 @@ public class BillingBuilder {
 
     public String getRoutingKey() {
         return routingKey;
-    }
-
-    public String getJsonData() {
-        return gson.toJson(buildStarter().getSecond());
     }
 }
