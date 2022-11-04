@@ -1,5 +1,6 @@
 package br.com.devrodrigues.orchestrator.datasources.message;
 
+import br.com.devrodrigues.orchestrator.core.ExternalQueue;
 import br.com.devrodrigues.orchestrator.core.IntraQueue;
 import br.com.devrodrigues.orchestrator.repository.RabbitRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,7 +21,7 @@ public class RabbitRepositoryImpl implements RabbitRepository {
     }
 
     @Override
-    public void producer(IntraQueue intraQueue) throws JsonProcessingException {
+    public void producerOnExchange(IntraQueue intraQueue) throws JsonProcessingException {
         var json = mapper.writeValueAsString(intraQueue.messageData());
 
         this.amqpTemplate.convertAndSend(
@@ -28,5 +29,11 @@ public class RabbitRepositoryImpl implements RabbitRepository {
                 intraQueue.routingKey(),
                 json
         );
+    }
+
+    @Override
+    public void producerOnTopic(ExternalQueue externalQueue) throws JsonProcessingException {
+        var json = mapper.writeValueAsString(externalQueue.messageData());
+        this.amqpTemplate.convertAndSend(externalQueue.queueName(), json);
     }
 }

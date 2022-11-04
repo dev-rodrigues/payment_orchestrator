@@ -1,12 +1,12 @@
 package br.com.devrodrigues.orchestrator.service;
 
+import br.com.devrodrigues.orchestrator.core.ExternalQueue;
 import br.com.devrodrigues.orchestrator.core.IntraQueue;
 import br.com.devrodrigues.orchestrator.core.PaymentRequest;
 import br.com.devrodrigues.orchestrator.core.build.BillingBuilder;
 import br.com.devrodrigues.orchestrator.repository.BillingRepository;
 import br.com.devrodrigues.orchestrator.repository.RabbitRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -24,15 +24,15 @@ public class Orchestrator {
     @Value("${queue.intra.payment.slip.routing-key}")
     private String slipRoutingKey;
 
-    private final Gson gson;
+    @Value("${queue.beta.response}")
+    private String external;
+
     private final BillingRepository billingRepository;
     private final RabbitRepository rabbitRepository;
 
-    public Orchestrator(Gson gson, BillingRepository repository, RabbitRepository rabbitRepository) {
-        this.gson = gson;
+    public Orchestrator(BillingRepository repository, RabbitRepository rabbitRepository) {
         this.billingRepository = repository;
         this.rabbitRepository = rabbitRepository;
-
     }
 
     public void execute(PaymentRequest request) throws JsonProcessingException {
@@ -48,10 +48,17 @@ public class Orchestrator {
 
         var response = billingRepository.store(result.getFirst());
 
-        rabbitRepository.producer(
+        rabbitRepository.producerOnExchange(
                 new IntraQueue(
                         exchangeName,
                         result.getSecond().getRoutingKey(),
+                        response
+                )
+        );
+
+        rabbitRepository.producerOnTopic(
+                new ExternalQueue(
+                        external,
                         response
                 )
         );

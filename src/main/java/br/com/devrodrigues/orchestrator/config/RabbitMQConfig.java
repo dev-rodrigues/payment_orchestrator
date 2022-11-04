@@ -14,6 +14,9 @@ public class RabbitMQConfig {
     @Value("${queue.beta.request}")
     private String paymentRequest;
 
+    @Value("${queue.beta.response}")
+    private String paymentResponse;
+
     @Value("${queue.intra.payment.slip.name}")
     private String slipQueueName;
 
@@ -29,11 +32,19 @@ public class RabbitMQConfig {
     @Value("${queue.intra.exchange}")
     public String exchangeName;
 
+
+    // request - response
     @Bean
     public Queue paymentRequestQueue() {
         return new Queue(paymentRequest, true);
     }
 
+    @Bean
+    public Queue paymentResponseQueue() {
+        return new Queue(paymentResponse, true);
+    }
+
+    // intra application
     @Bean
     public Queue slipQueue() {
         return new Queue(slipQueueName, true);
