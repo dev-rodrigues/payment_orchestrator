@@ -2,10 +2,14 @@ package br.com.devrodrigues.orchestrator.core.build;
 
 import br.com.devrodrigues.orchestrator.core.PaymentType;
 import br.com.devrodrigues.orchestrator.datasources.database.entity.BillingEntity;
+import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.util.Pair;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Objects;
 
 import static br.com.devrodrigues.orchestrator.datasources.database.entity.BillingType.of;
 import static br.com.devrodrigues.orchestrator.datasources.database.entity.States.WAITING;
@@ -14,17 +18,21 @@ import static java.time.LocalDateTime.now;
 public class BillingBuilder {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
+    private final Gson gson;
     private String userId;
     private String orderId;
     private PaymentType paymentType;
     private BigDecimal value;
 
-    private BillingBuilder() {
+    private String routingKey;
+    private List<String> possibleRoutings;
+
+    private BillingBuilder(Gson gson) {
+        this.gson = gson;
     }
 
-    public static BillingBuilder builder() {
-        return new BillingBuilder();
+    public static BillingBuilder builder(Gson gson) {
+        return new BillingBuilder(gson);
     }
 
     public BillingBuilder withUser(String userId) {
@@ -34,6 +42,25 @@ public class BillingBuilder {
 
     public BillingBuilder withPayment(PaymentType paymentType) {
         this.paymentType = paymentType;
+        return this;
+    }
+
+    public BillingBuilder possibleRoutings(List<String> asList) {
+        this.possibleRoutings = asList;
+        return this;
+    }
+
+    public BillingBuilder withExchange() {
+        if (Objects.isNull(this.paymentType)) {
+            throw new IllegalStateException("paymentType is required");
+        }
+
+        switch (this.paymentType) {
+            case CREDIT_CARD -> this.routingKey = this.possibleRoutings.get(0);
+            case SLIP -> this.routingKey = this.possibleRoutings.get(1);
+            default -> throw new IllegalStateException("Unexpected value: " + this.paymentType);
+        }
+
         return this;
     }
 
@@ -47,7 +74,7 @@ public class BillingBuilder {
         return this;
     }
 
-    public BillingEntity buildStarter() {
+    public Pair<BillingEntity, BillingBuilder> buildStarter() {
 
         if (userId == null) {
             throw new IllegalStateException("User is required");
@@ -72,6 +99,14 @@ public class BillingBuilder {
 
         logger.info("Billing starter created: {}", billingEntity);
 
-        return billingEntity;
+        return Pair.of(billingEntity, this);
+    }
+
+    public String getRoutingKey() {
+        return routingKey;
+    }
+
+    public String getJsonData() {
+        return gson.toJson(buildStarter().getSecond());
     }
 }
