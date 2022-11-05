@@ -24,7 +24,7 @@ public class Test {
     public void test() throws JsonProcessingException {
         orchestrator.execute(
                 new PaymentRequest(
-                        "123",
+                        "12345",
                         PaymentType.SLIP,
                         "carlos",
                         BigDecimal.ONE

@@ -2,7 +2,6 @@ package br.com.devrodrigues.orchestrator.core.build;
 
 import br.com.devrodrigues.orchestrator.core.PaymentType;
 import br.com.devrodrigues.orchestrator.datasources.database.entity.BillingEntity;
-import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.util.Pair;
@@ -91,6 +90,7 @@ public class BillingBuilder {
                 this.orderId,
                 WAITING,
                 of(paymentType.name()),
+                value,
                 now(),
                 now()
         );

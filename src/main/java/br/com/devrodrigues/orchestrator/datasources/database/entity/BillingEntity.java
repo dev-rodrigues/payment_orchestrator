@@ -3,8 +3,14 @@ package br.com.devrodrigues.orchestrator.datasources.database.entity;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -28,6 +34,8 @@ public class BillingEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     private BillingType type;
 
+    private BigDecimal value;
+
     @CreatedDate
     private LocalDateTime createdAt;
 
@@ -41,12 +49,14 @@ public class BillingEntity implements Serializable {
                          String orderId,
                          States state,
                          BillingType type,
+                         BigDecimal value,
                          LocalDateTime createdAt,
                          LocalDateTime updatedAt) {
         this.userId = userId;
         this.orderId = orderId;
         this.state = state;
         this.type = type;
+        this.value = value;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -107,6 +117,14 @@ public class BillingEntity implements Serializable {
         this.orderId = orderId;
     }
 
+    public BigDecimal getValue() {
+        return value;
+    }
+
+    public void setValue(BigDecimal value) {
+        this.value = value;
+    }
+
     @Override
     public String toString() {
         return "BillingEntity{" +
@@ -115,6 +133,7 @@ public class BillingEntity implements Serializable {
                 ", orderId='" + orderId + '\'' +
                 ", state=" + state +
                 ", type=" + type +
+                ", value=" + value +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';

@@ -5,6 +5,11 @@ import br.com.devrodrigues.orchestrator.datasources.database.repository.BillingE
 import br.com.devrodrigues.orchestrator.repository.BillingRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.*;
+
 @Component
 public class BillingRepositoryImpl implements BillingRepository {
 
@@ -17,5 +22,15 @@ public class BillingRepositoryImpl implements BillingRepository {
     @Override
     public BillingEntity store(BillingEntity entity) {
         return repository.save(entity);
+    }
+
+    @Override
+    public List<BillingEntity> findByOrderId(String orderId) {
+        return repository
+                .findAll()
+                .stream()
+                .filter(
+                        it -> it.getOrderId().equalsIgnoreCase(orderId)
+                ).collect(toList());
     }
 }
