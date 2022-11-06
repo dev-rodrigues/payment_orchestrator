@@ -10,10 +10,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RabbitRepositoryImpl implements RabbitRepository {
-
     private final AmqpTemplate amqpTemplate;
     private final ObjectMapper mapper;
-
 
     public RabbitRepositoryImpl(AmqpTemplate amqpTemplate, ObjectMapper mapper) {
         this.amqpTemplate = amqpTemplate;
