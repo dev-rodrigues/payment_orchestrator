@@ -6,9 +6,9 @@ import br.com.devrodrigues.orchestrator.repository.BillingRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
 
 @Component
 public class BillingRepositoryImpl implements BillingRepository {
@@ -32,5 +32,10 @@ public class BillingRepositoryImpl implements BillingRepository {
                 .filter(
                         it -> it.getOrderId().equalsIgnoreCase(orderId)
                 ).collect(toList());
+    }
+
+    @Override
+    public BillingEntity findById(UUID billingId) {
+        return repository.findById(billingId).orElseThrow();
     }
 }

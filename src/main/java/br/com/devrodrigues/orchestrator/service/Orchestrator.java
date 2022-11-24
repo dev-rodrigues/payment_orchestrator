@@ -3,6 +3,7 @@ package br.com.devrodrigues.orchestrator.service;
 import br.com.devrodrigues.orchestrator.core.ExternalQueue;
 import br.com.devrodrigues.orchestrator.core.IntraQueue;
 import br.com.devrodrigues.orchestrator.core.PaymentRequest;
+import br.com.devrodrigues.orchestrator.core.PaymentResponse;
 import br.com.devrodrigues.orchestrator.core.build.BillingBuilder;
 import br.com.devrodrigues.orchestrator.repository.BillingRepository;
 import br.com.devrodrigues.orchestrator.repository.RabbitRepository;
@@ -35,7 +36,7 @@ public class Orchestrator {
         this.rabbitRepository = rabbitRepository;
     }
 
-    public void execute(PaymentRequest request) throws JsonProcessingException {
+    public void startProcess(PaymentRequest request) throws JsonProcessingException {
         var result = BillingBuilder
                 .builder()
                 .possibleRoutings(asList(creditCardRoutingKey, slipRoutingKey))
@@ -60,6 +61,19 @@ public class Orchestrator {
                 new ExternalQueue(
                         external,
                         response
+                )
+        );
+    }
+
+    public void mediateProcess(PaymentResponse paymentResponse) throws JsonProcessingException {
+        var billing = billingRepository.findById(paymentResponse.billingId());
+        billing.setState(paymentResponse.state());
+        billingRepository.store(billing);
+
+        rabbitRepository.producerOnTopic(
+                new ExternalQueue(
+                        external,
+                        billing
                 )
         );
     }

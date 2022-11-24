@@ -26,7 +26,7 @@ public class PaymentValidate {
     }
 
     @Around(
-            "execution(* br.com.devrodrigues.orchestrator.service.Orchestrator.execute(..))"
+            "execution(* br.com.devrodrigues.orchestrator.service.Orchestrator.startProcess(..))"
     )
     public Object validate(ProceedingJoinPoint pjp) throws Throwable {
         var request = (PaymentRequest) pjp.getArgs()[0];

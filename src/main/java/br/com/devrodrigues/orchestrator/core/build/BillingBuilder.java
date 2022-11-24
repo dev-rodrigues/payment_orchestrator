@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static br.com.devrodrigues.orchestrator.datasources.database.entity.BillingType.of;
-import static br.com.devrodrigues.orchestrator.datasources.database.entity.States.WAITING;
+import static br.com.devrodrigues.orchestrator.core.State.WAITING;
 import static java.time.LocalDateTime.now;
 
 public class BillingBuilder {
