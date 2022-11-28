@@ -70,7 +70,7 @@ public class Orchestrator {
         return result;
     }
 
-    public BillingEntity mediateProcess(PaymentResponse paymentResponse) throws JsonProcessingException {
+    public void mediateProcess(PaymentResponse paymentResponse) throws JsonProcessingException {
         var billing = billingRepository.findById(paymentResponse.billingId());
 
         if (nonNull(billing)) {
@@ -84,7 +84,7 @@ public class Orchestrator {
                     )
             );
 
-            return billing;
+            return;
         }
 
         throw new RuntimeException("billing not found");
