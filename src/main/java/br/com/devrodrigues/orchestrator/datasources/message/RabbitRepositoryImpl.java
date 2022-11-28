@@ -21,28 +21,21 @@ public class RabbitRepositoryImpl implements RabbitRepository {
     }
 
     @Override
-    public void producerOnExchange(IntraQueue intraQueue) {
-        try {
-            String json = getJson(intraQueue);
+    public void producerOnExchange(IntraQueue intraQueue) throws JsonProcessingException {
 
-            this.amqpTemplate.convertAndSend(
-                    intraQueue.exchangeName(),
-                    intraQueue.routingKey(),
-                    json
-            );
-        } catch (JsonProcessingException e) {
-            // fallback
-        }
+        String json = getJson(intraQueue);
+
+        this.amqpTemplate.convertAndSend(
+                intraQueue.exchangeName(),
+                intraQueue.routingKey(),
+                json
+        );
     }
 
     @Override
-    public void producerOnTopic(ExternalQueue externalQueue) {
-        try {
-            var json = getJson(externalQueue.messageData());
-            this.amqpTemplate.convertAndSend(externalQueue.queueName(), json);
-        } catch (JsonProcessingException e) {
-            // fallback
-        }
+    public void producerOnTopic(ExternalQueue externalQueue) throws JsonProcessingException {
+        var json = getJson(externalQueue.messageData());
+        this.amqpTemplate.convertAndSend(externalQueue.queueName(), json);
     }
 
     private String getJson(Object object) throws JsonProcessingException {
