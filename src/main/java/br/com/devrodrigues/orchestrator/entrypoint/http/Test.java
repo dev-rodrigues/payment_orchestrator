@@ -22,11 +22,11 @@ public class Test {
 
     @GetMapping
     public void test() throws JsonProcessingException {
-        orchestrator.execute(
+        orchestrator.startProcess(
                 new PaymentRequest(
                         "12345",
                         PaymentType.SLIP,
-                        "carlos",
+                        "123",
                         BigDecimal.ONE
                 )
         );

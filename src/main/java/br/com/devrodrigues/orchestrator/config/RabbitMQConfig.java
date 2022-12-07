@@ -26,8 +26,14 @@ public class RabbitMQConfig {
     @Value("${queue.intra.payment.credit-card.name}")
     private String creditCardQueueName;
 
-    @Value("w${queue.intra.payment.credit-card.routing-key}")
+    @Value("${queue.intra.payment.credit-card.routing-key}")
     private String creditCardQueueRoutingKey;
+
+    @Value("${queue.intra.payment.result.name}")
+    private String resultQueueName;
+
+    @Value("${queue.intra.payment.result.routing-key}")
+    private String resultQueueRoutingKey;
 
     @Value("${queue.intra.exchange}")
     public String exchangeName;
@@ -56,6 +62,11 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public Queue resultQueue() {
+        return new Queue(resultQueueName, true);
+    }
+
+    @Bean
     public DirectExchange exchange() {
         return new DirectExchange(exchangeName);
     }
@@ -68,5 +79,10 @@ public class RabbitMQConfig {
     @Bean
     public Binding creditCardBinding(Queue creditCardQueue, DirectExchange exchange) {
         return BindingBuilder.bind(creditCardQueue).to(exchange).with(creditCardQueueRoutingKey);
+    }
+
+    @Bean
+    public Binding resultBinding(Queue resultQueue, DirectExchange exchange) {
+        return BindingBuilder.bind(resultQueue).to(exchange).with(resultQueueRoutingKey);
     }
 }

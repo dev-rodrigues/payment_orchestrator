@@ -1,6 +1,7 @@
 package br.com.devrodrigues.orchestrator.entrypoint.message;
 
 import br.com.devrodrigues.orchestrator.core.PaymentRequest;
+import br.com.devrodrigues.orchestrator.core.PaymentResponse;
 import br.com.devrodrigues.orchestrator.service.Orchestrator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
@@ -20,8 +21,14 @@ public class QueueConsumer {
     }
 
     @RabbitListener(queues = {"${queue.beta.request}"})
-    public void receive(@Payload String fileBody) throws JsonProcessingException {
+    public void receiveExternal(@Payload String fileBody) throws JsonProcessingException {
         var paymentRequest = gson.fromJson(fileBody, PaymentRequest.class);
-        orchestrator.execute(paymentRequest);
+        orchestrator.startProcess(paymentRequest);
+    }
+
+    @RabbitListener(queues = {"${queue.intra.payment.result.name}"})
+    public void receiveInternal(@Payload String fileBody) throws JsonProcessingException {
+        var paymentResponse = gson.fromJson(fileBody, PaymentResponse.class);
+        orchestrator.mediateProcess(paymentResponse);
     }
 }

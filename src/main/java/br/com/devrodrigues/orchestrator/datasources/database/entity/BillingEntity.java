@@ -1,20 +1,21 @@
 package br.com.devrodrigues.orchestrator.datasources.database.entity;
 
+import br.com.devrodrigues.orchestrator.core.State;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import static javax.persistence.GenerationType.AUTO;
+import static jakarta.persistence.GenerationType.AUTO;
 
 @Entity(name = "billing")
 public class BillingEntity implements Serializable {
@@ -26,10 +27,11 @@ public class BillingEntity implements Serializable {
 
     private String userId;
 
+    @Column(nullable = false, unique = true)
     private String orderId;
 
     @Enumerated(EnumType.STRING)
-    private States state;
+    private State state;
 
     @Enumerated(EnumType.STRING)
     private BillingType type;
@@ -47,7 +49,7 @@ public class BillingEntity implements Serializable {
 
     public BillingEntity(String userId,
                          String orderId,
-                         States state,
+                         State state,
                          BillingType type,
                          BigDecimal value,
                          LocalDateTime createdAt,
@@ -77,11 +79,11 @@ public class BillingEntity implements Serializable {
         this.userId = userId;
     }
 
-    public States getState() {
+    public State getState() {
         return state;
     }
 
-    public void setState(States state) {
+    public void setState(State state) {
         this.state = state;
     }
 
