@@ -1,9 +1,6 @@
 package br.com.devrodrigues.orchestrator.service;
 
-import br.com.devrodrigues.orchestrator.core.ExternalQueue;
-import br.com.devrodrigues.orchestrator.core.IntraQueue;
-import br.com.devrodrigues.orchestrator.core.PaymentRequest;
-import br.com.devrodrigues.orchestrator.core.PaymentResponse;
+import br.com.devrodrigues.orchestrator.core.*;
 import br.com.devrodrigues.orchestrator.core.build.BillingBuilder;
 import br.com.devrodrigues.orchestrator.datasources.database.entity.BillingEntity;
 import br.com.devrodrigues.orchestrator.repository.BillingRepository;
@@ -61,9 +58,9 @@ public class Orchestrator {
         );
 
         rabbitRepository.producerOnTopic(
-                new ExternalQueue(
+                new ExternalResponse(
                         external,
-                        response
+                        new Response(request.orderId(), response.getState().name())
                 )
         );
 
@@ -78,9 +75,9 @@ public class Orchestrator {
             billing = billingRepository.store(billing);
 
             rabbitRepository.producerOnTopic(
-                    new ExternalQueue(
+                    new ExternalResponse(
                             external,
-                            billing
+                            new Response(billing.getOrderId(), billing.getState().name())
                     )
             );
 

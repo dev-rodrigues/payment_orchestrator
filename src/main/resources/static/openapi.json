@@ -1,0 +1,111 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "orchestrator",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/start": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Request"
+              },
+              "examples": {
+                "request": {
+                  "value": {
+                    "orderId": "57d096bc-831f-4108-a1b6-ce982a90c7bb",
+                    "paymentType": "SLIP",
+                    "userId": "ebac99eb-3811-46b8-a717-7adf989f080d",
+                    "value": 4.04
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "no-content"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "response": {
+                    "value": {
+                      "message": "falha na integração"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "bad request"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Request": {
+        "description": "",
+        "required": [
+          "orderId",
+          "paymentType",
+          "userId",
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "description": "",
+            "type": "string"
+          },
+          "paymentType": {
+            "description": "",
+            "enum": [
+              "SLIP",
+              "CREDIT_CARD"
+            ],
+            "type": "string"
+          },
+          "userId": {
+            "description": "",
+            "type": "string"
+          },
+          "value": {
+            "format": "float",
+            "description": "",
+            "type": "number"
+          }
+        },
+        "example": {
+          "orderId": "5556ab68-a631-4102-83ea-2666aaee9bb4",
+          "paymentType": "CREDIT_CARD",
+          "userId": "ebac99eb-3811-46b8-a717-7adf989f080d",
+          "value": 72.75
+        }
+      },
+      "Error": {
+        "title": "Root Type for Error",
+        "description": "",
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "message": "erro"
+        }
+      }
+    }
+  }
+}

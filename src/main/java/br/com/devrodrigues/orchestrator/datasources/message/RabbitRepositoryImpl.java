@@ -1,6 +1,7 @@
 package br.com.devrodrigues.orchestrator.datasources.message;
 
 import br.com.devrodrigues.orchestrator.core.ExternalQueue;
+import br.com.devrodrigues.orchestrator.core.ExternalResponse;
 import br.com.devrodrigues.orchestrator.core.IntraQueue;
 import br.com.devrodrigues.orchestrator.repository.RabbitRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,8 +25,8 @@ public class RabbitRepositoryImpl implements RabbitRepository {
         String json = getJson(intraQueue);
 
         this.amqpTemplate.convertAndSend(
-                intraQueue.exchangeName(),
-                intraQueue.routingKey(),
+                intraQueue.getExchangeName(),
+                intraQueue.getRoutingKey(),
                 json
         );
     }
@@ -34,6 +35,12 @@ public class RabbitRepositoryImpl implements RabbitRepository {
     public void producerOnTopic(ExternalQueue externalQueue) throws JsonProcessingException {
         var json = getJson(externalQueue.messageData());
         this.amqpTemplate.convertAndSend(externalQueue.queueName(), json);
+    }
+
+    @Override
+    public void producerOnTopic(ExternalResponse externalQueue) throws JsonProcessingException {
+        var json = getJson(externalQueue.getResponse());
+        this.amqpTemplate.convertAndSend(externalQueue.getQueueName(), json);
     }
 
     private String getJson(Object object) throws JsonProcessingException {
