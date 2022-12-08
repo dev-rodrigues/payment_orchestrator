@@ -3,6 +3,7 @@ package br.com.devrodrigues.orchestrator.service;
 import br.com.devrodrigues.orchestrator.core.BillingData;
 import br.com.devrodrigues.orchestrator.core.PaymentRequest;
 import br.com.devrodrigues.orchestrator.core.PaymentResponse;
+import br.com.devrodrigues.orchestrator.datasources.database.entity.BillingEntity;
 import br.com.devrodrigues.orchestrator.repository.BillingRepository;
 import br.com.devrodrigues.orchestrator.repository.RabbitRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,7 +16,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.math.BigDecimal;
+import java.util.UUID;
+
 import static br.com.devrodrigues.orchestrator.core.PaymentType.SLIP;
+import static br.com.devrodrigues.orchestrator.core.State.PROCESSED;
 import static br.com.devrodrigues.orchestrator.core.State.PROCESSING;
 import static java.math.BigDecimal.ONE;
 import static java.util.UUID.randomUUID;
@@ -89,5 +94,25 @@ class OrchestratorTest {
                         "dummy", "dummy", "dummy", "dummy", "dummy"
                 ))
         ));
+    }
+
+    @Test
+    void should_update_status_when_billing_exists() throws JsonProcessingException {
+        when(billingRepository.findById(any())).thenReturn(new BillingEntity());
+        orchestrator.mediateProcess(new PaymentResponse(
+                UUID.randomUUID(),
+                "dummy",
+                "dummy",
+                ONE,
+                PROCESSED,
+                new BillingData(
+                        "dummy",
+                        "dummy",
+                        "dummy",
+                        "dummy",
+                        "dummy"
+                )
+        ));
+        verify(rabbitRepository, times(1)).producerOnTopic(any());
     }
 }
