@@ -67,6 +67,11 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public Queue parkQueue() {
+        return new Queue("park", true);
+    }
+
+    @Bean
     public DirectExchange exchange() {
         return new DirectExchange(exchangeName);
     }
@@ -84,5 +89,10 @@ public class RabbitMQConfig {
     @Bean
     public Binding resultBinding(Queue resultQueue, DirectExchange exchange) {
         return BindingBuilder.bind(resultQueue).to(exchange).with(resultQueueRoutingKey);
+    }
+
+    @Bean
+    public Binding parkBinding(Queue parkQueue, DirectExchange exchange) {
+        return BindingBuilder.bind(parkQueue).to(exchange).with("beta.payment.park");
     }
 }
