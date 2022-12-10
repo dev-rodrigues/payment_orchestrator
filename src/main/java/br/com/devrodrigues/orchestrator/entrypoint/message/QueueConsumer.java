@@ -27,7 +27,6 @@ public class QueueConsumer {
     public void receiveExternal(@Payload String fileBody) throws JsonProcessingException {
         var paymentRequest = gson.fromJson(fileBody, PaymentRequest.class);
         var response = orchestrator.startProcess(paymentRequest);
-
         logger.info("started: {}", response.getFirst());
     }
 

@@ -119,7 +119,7 @@ class OrchestratorTest {
 
         // and: calling billing repository
         when(billingRepository.findById(any()))
-                .thenReturn(getUpdatedBillingEntity());
+                .thenReturn(null);
 
         // and: calling billing repository
         when(billingRepository.store(any(BillingEntity.class)))
@@ -128,6 +128,5 @@ class OrchestratorTest {
 
         //then: throwing exception
         assertThrows(RuntimeException.class, () -> orchestrator.mediateProcess(request));
-
     }
 }

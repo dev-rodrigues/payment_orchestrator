@@ -83,4 +83,34 @@ public class Fixture {
                 BillingBuilder.builder()
         );
     }
+
+    public static String getValidJSONPaymentRequest() {
+        return """
+                {
+                    "orderId": "orderId",
+                    "paymentType": "SLIP",
+                    "userId": "userId",
+                    "value": 1.0
+                }
+                """;
+    }
+
+    public static String getValidJSONPaymentResponse() {
+        return """
+                {
+                    "orderId": "orderId",
+                    "paymentType": "SLIP",
+                    "userId": "userId",
+                    "value": 1.0,
+                    "state": "PROCESSING",
+                    "billingData": {
+                        "userId": "userId",
+                        "fullName": "fullName",
+                        "document": "document",
+                        "address": "address",
+                        "phone": "phone"
+                    }
+                }
+                """;
+    }
 }
