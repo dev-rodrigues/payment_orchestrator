@@ -39,7 +39,7 @@ public class Orchestrator {
     public Pair<BillingEntity, BillingBuilder> startProcess(PaymentRequest request) throws JsonProcessingException {
         var result = BillingBuilder
                 .builder()
-                .possibleRoutings(asList(creditCardRoutingKey, slipRoutingKey))
+                .possibleRouting(asList(creditCardRoutingKey, slipRoutingKey))
                 .withOrderId(request.orderId())
                 .withPayment(request.paymentType())
                 .withExchange()
@@ -67,7 +67,7 @@ public class Orchestrator {
         return result;
     }
 
-    public void mediateProcess(PaymentResponse paymentResponse) throws JsonProcessingException {
+    public BillingEntity mediateProcess(PaymentResponse paymentResponse) throws JsonProcessingException {
         var billing = billingRepository.findById(paymentResponse.billingId());
 
         if (nonNull(billing)) {
@@ -81,7 +81,7 @@ public class Orchestrator {
                     )
             );
 
-            return;
+            return billing;
         }
 
         throw new RuntimeException("billing not found");

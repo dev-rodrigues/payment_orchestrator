@@ -2,7 +2,6 @@ package br.com.devrodrigues.orchestrator.entrypoint.http;
 
 import br.com.devrodrigues.orchestrator.core.PaymentRequest;
 import br.com.devrodrigues.orchestrator.core.PaymentType;
-import br.com.devrodrigues.orchestrator.core.Response;
 import br.com.devrodrigues.orchestrator.openapi.api.StartApi;
 import br.com.devrodrigues.orchestrator.openapi.model.Request;
 import br.com.devrodrigues.orchestrator.service.Orchestrator;
@@ -13,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
-
-import static java.math.BigDecimal.valueOf;
 
 @RestController
 public class StartApiImpl implements StartApi {
@@ -35,16 +32,17 @@ public class StartApiImpl implements StartApi {
                             request.getOrderId(),
                             PaymentType.fromString(request.getPaymentType().getValue()),
                             request.getUserId(),
-                            valueOf(request.getValue())
+                            BigDecimal.valueOf(request.getValue())
                     )
             );
 
-            System.out.println(response);
+            logger.info("Response: {}", response);
 
         } catch (JsonProcessingException e) {
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().build();
         }
+
         return ResponseEntity.noContent().build();
     }
 }

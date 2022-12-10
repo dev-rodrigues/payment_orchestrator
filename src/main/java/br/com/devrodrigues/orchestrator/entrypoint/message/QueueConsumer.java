@@ -5,6 +5,8 @@ import br.com.devrodrigues.orchestrator.core.PaymentResponse;
 import br.com.devrodrigues.orchestrator.service.Orchestrator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class QueueConsumer {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final Orchestrator orchestrator;
     private final Gson gson;
 
@@ -23,12 +26,15 @@ public class QueueConsumer {
     @RabbitListener(queues = {"${queue.beta.request}"})
     public void receiveExternal(@Payload String fileBody) throws JsonProcessingException {
         var paymentRequest = gson.fromJson(fileBody, PaymentRequest.class);
-        orchestrator.startProcess(paymentRequest);
+        var response = orchestrator.startProcess(paymentRequest);
+
+        logger.info("started: {}", response.getFirst());
     }
 
     @RabbitListener(queues = {"${queue.intra.payment.result.name}"})
     public void receiveInternal(@Payload String fileBody) throws JsonProcessingException {
         var paymentResponse = gson.fromJson(fileBody, PaymentResponse.class);
-        orchestrator.mediateProcess(paymentResponse);
+        var response = orchestrator.mediateProcess(paymentResponse);
+        logger.info("updated: {}", response);
     }
 }

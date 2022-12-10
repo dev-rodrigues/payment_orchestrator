@@ -8,10 +8,10 @@ services:
       - "5672:5672"
       - "15672:15672"
       - "5671:5671"
-  slip:
-    container_name: slip
-    image: httpsantos/slip_service:1.0
-    ports:
-      - "7001:7001"
-    depends_on:
-      - rabbitmq
+#  slip:
+#    container_name: slip
+#    image: httpsantos/slip_service:1.0
+#    ports:
+#      - "7001:7001"
+#    depends_on:
+#      - rabbitmq

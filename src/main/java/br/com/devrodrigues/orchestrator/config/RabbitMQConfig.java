@@ -85,4 +85,9 @@ public class RabbitMQConfig {
     public Binding resultBinding(Queue resultQueue, DirectExchange exchange) {
         return BindingBuilder.bind(resultQueue).to(exchange).with(resultQueueRoutingKey);
     }
+
+//    @Bean
+//    public Binding parkBinding(Queue parkQueue, DirectExchange exchange) {
+//        return BindingBuilder.bind(parkQueue).to(exchange).with(resultQueueRoutingKey);
+//    }
 }

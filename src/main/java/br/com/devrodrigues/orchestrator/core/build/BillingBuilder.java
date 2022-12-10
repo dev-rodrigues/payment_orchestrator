@@ -42,7 +42,7 @@ public class BillingBuilder {
         return this;
     }
 
-    public BillingBuilder possibleRoutings(List<String> asList) {
+    public BillingBuilder possibleRouting(List<String> asList) {
         this.possibleRoutings = asList;
         return this;
     }
