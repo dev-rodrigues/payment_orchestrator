@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class QueueConsumer {
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final Orchestrator orchestrator;
     private final Gson gson;
 
@@ -27,13 +25,13 @@ public class QueueConsumer {
     public void receiveExternal(@Payload String fileBody) throws JsonProcessingException {
         var paymentRequest = gson.fromJson(fileBody, PaymentRequest.class);
         var response = orchestrator.startProcess(paymentRequest);
-        logger.info("started: {}", response.getFirst());
+        System.out.println("Response: " + response.getFirst());
     }
 
     @RabbitListener(queues = {"${queue.intra.payment.result.name}"})
     public void receiveInternal(@Payload String fileBody) throws JsonProcessingException {
         var paymentResponse = gson.fromJson(fileBody, PaymentResponse.class);
         var response = orchestrator.mediateProcess(paymentResponse);
-        logger.info("updated: {}", response);
+        System.out.println("updated: " + response);
     }
 }

@@ -6,8 +6,6 @@ import br.com.devrodrigues.orchestrator.openapi.api.StartApi;
 import br.com.devrodrigues.orchestrator.openapi.model.Request;
 import br.com.devrodrigues.orchestrator.service.Orchestrator;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,8 +15,6 @@ import java.math.BigDecimal;
 public class StartApiImpl implements StartApi {
 
     private final Orchestrator orchestrator;
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     public StartApiImpl(Orchestrator orchestrator) {
         this.orchestrator = orchestrator;
     }
@@ -36,10 +32,10 @@ public class StartApiImpl implements StartApi {
                     )
             );
 
-            logger.info("Response: {}", response);
 
+            System.out.println("Response: " + response.getFirst());
         } catch (JsonProcessingException e) {
-            logger.error(e.getMessage());
+            System.out.println("Error: " + e.getMessage());
             return ResponseEntity.badRequest().build();
         }
 

@@ -6,9 +6,6 @@ import br.com.devrodrigues.orchestrator.repository.BillingRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.UUID;
-
-import static java.util.stream.Collectors.toList;
 
 @Component
 public class BillingRepositoryImpl implements BillingRepository {
@@ -25,17 +22,12 @@ public class BillingRepositoryImpl implements BillingRepository {
     }
 
     @Override
-    public List<BillingEntity> findByOrderId(String orderId) {
-        return repository
-                .findAll()
-                .stream()
-                .filter(
-                        it -> it.getOrderId().equalsIgnoreCase(orderId)
-                ).collect(toList());
+    public BillingEntity findById(Long billingId) {
+        return repository.findById(billingId).orElseThrow();
     }
 
     @Override
-    public BillingEntity findById(UUID billingId) {
-        return repository.findById(billingId).orElseThrow();
+    public List<BillingEntity> findAll() {
+        return repository.findAll();
     }
 }

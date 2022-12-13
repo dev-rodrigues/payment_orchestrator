@@ -3,55 +3,9 @@ package br.com.devrodrigues.orchestrator.core;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-import java.util.UUID;
 
-public final class PaymentResponse {
-    private final UUID billingId;
-    private final String orderId;
-    private final String userId;
-    private final BigDecimal value;
-    private final State state;
-    private final BillingData billingData;
-
-    public PaymentResponse(
-            UUID billingId,
-            String orderId,
-            String userId,
-            BigDecimal value,
-            State state,
-            BillingData billingData
-    ) {
-        this.billingId = billingId;
-        this.orderId = orderId;
-        this.userId = userId;
-        this.value = value;
-        this.state = state;
-        this.billingData = billingData;
-    }
-
-    public UUID billingId() {
-        return billingId;
-    }
-
-    public String orderId() {
-        return orderId;
-    }
-
-    public String userId() {
-        return userId;
-    }
-
-    public BigDecimal value() {
-        return value;
-    }
-
-    public State state() {
-        return state;
-    }
-
-    public BillingData billingData() {
-        return billingData;
-    }
+public record PaymentResponse(Long billingId, String orderId, String userId, BigDecimal value, State state,
+                              BillingData billingData) {
 
     @Override
     public boolean equals(Object obj) {
@@ -64,11 +18,6 @@ public final class PaymentResponse {
                 Objects.equals(this.value, that.value) &&
                 Objects.equals(this.state, that.state) &&
                 Objects.equals(this.billingData, that.billingData);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(billingId, orderId, userId, value, state, billingData);
     }
 
     @Override

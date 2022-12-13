@@ -54,7 +54,7 @@ public class Fixture {
 
     public static PaymentResponse getValidPaymentResponse() {
         return new PaymentResponse(
-                UUID.randomUUID(),
+                1L,
                 "dummy_orderId",
                 "dummy_userId",
                 ONE,

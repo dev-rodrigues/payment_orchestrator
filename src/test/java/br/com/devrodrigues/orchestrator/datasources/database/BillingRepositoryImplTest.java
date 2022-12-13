@@ -78,11 +78,11 @@ class BillingRepositoryImplTest {
         var billingEntity = entity;
 
         // when: find billing
-        var response = repository.findByOrderId(billingEntity.getOrderId());
+        var response = repository.findById(billingEntity.getId());
 
         // then: billing found
         assertNotNull(response);
-        assertNotNull(response.get(0).getId());
-        assertEquals(billingEntity.getId(), response.get(0).getId());
+        assertNotNull(response.getId());
+        assertEquals(billingEntity.getId(), response.getId());
     }
 }

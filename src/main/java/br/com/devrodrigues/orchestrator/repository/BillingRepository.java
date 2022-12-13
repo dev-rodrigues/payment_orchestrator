@@ -8,7 +8,9 @@ import java.util.UUID;
 public interface BillingRepository {
     BillingEntity store(BillingEntity entity);
 
-    List<BillingEntity> findByOrderId(String orderId);
+//    List<BillingEntity> findByOrderId(String orderId);
 
-    BillingEntity findById(UUID billingId);
+    BillingEntity findById(Long billingId);
+
+    List<BillingEntity> findAll();
 }

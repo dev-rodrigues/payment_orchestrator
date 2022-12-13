@@ -50,6 +50,43 @@
           }
         }
       }
+    },
+    "/started": {
+      "get": {
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Billing"
+                  }
+                },
+                "examples": {
+                  "response": {
+                    "value": [
+                      {
+                        "id": "some text",
+                        "userId": "some text",
+                        "orderId": "some text",
+                        "state": "some text"
+                      },
+                      {
+                        "id": "some text",
+                        "userId": "some text",
+                        "orderId": "some text",
+                        "state": "some text"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "description": "report"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -104,6 +141,39 @@
         },
         "example": {
           "message": "erro"
+        }
+      },
+      "Billing": {
+        "description": "",
+        "required": [
+          "id",
+          "userId",
+          "orderId",
+          "state",
+          "paymentType"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "",
+            "type": "string"
+          },
+          "userId": {
+            "description": "",
+            "type": "string"
+          },
+          "orderId": {
+            "description": "",
+            "type": "string"
+          },
+          "state": {
+            "description": "",
+            "type": "string"
+          },
+          "paymentType": {
+            "description": "",
+            "type": "string"
+          }
         }
       }
     }
