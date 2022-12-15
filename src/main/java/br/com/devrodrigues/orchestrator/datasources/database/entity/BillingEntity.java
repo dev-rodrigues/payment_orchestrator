@@ -1,6 +1,6 @@
 package br.com.devrodrigues.orchestrator.datasources.database.entity;
 
-import br.com.devrodrigues.orchestrator.core.State;
+import br.com.devrodrigues.orchestrator.core.objectsvalues.State;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 

@@ -1,6 +1,6 @@
 package br.com.devrodrigues.orchestrator.core.build;
 
-import br.com.devrodrigues.orchestrator.core.PaymentType;
+import br.com.devrodrigues.orchestrator.core.objectsvalues.PaymentType;
 import br.com.devrodrigues.orchestrator.datasources.database.entity.BillingEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import static br.com.devrodrigues.orchestrator.datasources.database.entity.BillingType.of;
-import static br.com.devrodrigues.orchestrator.core.State.WAITING;
+import static br.com.devrodrigues.orchestrator.core.objectsvalues.State.WAITING;
 import static java.time.LocalDateTime.now;
 
 public class BillingBuilder {

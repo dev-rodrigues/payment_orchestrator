@@ -3,7 +3,7 @@ package br.com.devrodrigues.orchestrator.fixture;
 import br.com.devrodrigues.orchestrator.core.BillingData;
 import br.com.devrodrigues.orchestrator.core.PaymentRequest;
 import br.com.devrodrigues.orchestrator.core.PaymentResponse;
-import br.com.devrodrigues.orchestrator.core.State;
+import br.com.devrodrigues.orchestrator.core.objectsvalues.State;
 import br.com.devrodrigues.orchestrator.core.build.BillingBuilder;
 import br.com.devrodrigues.orchestrator.datasources.database.entity.BillingEntity;
 import br.com.devrodrigues.orchestrator.datasources.database.entity.BillingType;
@@ -11,10 +11,9 @@ import br.com.devrodrigues.orchestrator.openapi.model.Request;
 import org.springframework.data.util.Pair;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
-import static br.com.devrodrigues.orchestrator.core.PaymentType.SLIP;
-import static br.com.devrodrigues.orchestrator.core.State.PROCESSING;
+import static br.com.devrodrigues.orchestrator.core.objectsvalues.PaymentType.SLIP;
+import static br.com.devrodrigues.orchestrator.core.objectsvalues.State.PROCESSING;
 import static java.math.BigDecimal.ONE;
 
 public class Fixture {

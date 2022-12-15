@@ -8,7 +8,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 public interface RabbitRepository {
     void producerOnExchange(IntraQueue intraQueue) throws JsonProcessingException;
-
     void producerOnTopic(ExternalQueue externalQueue) throws JsonProcessingException;
     void producerOnTopic(ExternalResponse externalQueue) throws JsonProcessingException;
 }

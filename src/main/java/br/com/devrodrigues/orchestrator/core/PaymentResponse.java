@@ -1,6 +1,8 @@
 package br.com.devrodrigues.orchestrator.core;
 
 
+import br.com.devrodrigues.orchestrator.core.objectsvalues.State;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 

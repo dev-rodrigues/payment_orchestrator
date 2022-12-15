@@ -1,4 +1,4 @@
-package br.com.devrodrigues.orchestrator.core;
+package br.com.devrodrigues.orchestrator.core.objectsvalues;
 
 public enum State {
     CREATED,

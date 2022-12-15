@@ -51,7 +51,10 @@ public class BillingService {
     }
 
     public CompletionStage<BillingEntity> persist(BillingEntity billingEntity) {
-        return supplyAsync(() -> repository.store(billingEntity));
+        return supplyAsync(() -> repository.store(billingEntity)).exceptionally((error) -> {
+            System.out.println("Error: " + error.getMessage());
+            return null;
+        });
     }
 
     public CompletionStage<BillingEntity> getBillingById(Long billingId) {
@@ -69,6 +72,9 @@ public class BillingService {
     public CompletionStage<BillingEntity> update(BillingEntity billing, PaymentResponse response) {
         billing.setState(response.state());
         billing.setUpdatedAt(now());
-        return supplyAsync(() -> repository.store(billing));
+        return supplyAsync(() -> repository.store(billing)).exceptionally((error) -> {
+            System.out.println("Error: " + error.getMessage());
+            return null;
+        });
     }
 }

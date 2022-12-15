@@ -1,5 +1,7 @@
 package br.com.devrodrigues.orchestrator.core;
 
+import br.com.devrodrigues.orchestrator.core.objectsvalues.PaymentType;
+
 import java.math.BigDecimal;
 
 public class PaymentRequest {

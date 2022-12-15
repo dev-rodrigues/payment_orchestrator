@@ -1,7 +1,7 @@
 package br.com.devrodrigues.orchestrator.entrypoint.http;
 
 import br.com.devrodrigues.orchestrator.core.PaymentRequest;
-import br.com.devrodrigues.orchestrator.core.PaymentType;
+import br.com.devrodrigues.orchestrator.core.objectsvalues.PaymentType;
 import br.com.devrodrigues.orchestrator.openapi.api.StartApi;
 import br.com.devrodrigues.orchestrator.openapi.model.Request;
 import br.com.devrodrigues.orchestrator.service.OrchestratorCoordinator;

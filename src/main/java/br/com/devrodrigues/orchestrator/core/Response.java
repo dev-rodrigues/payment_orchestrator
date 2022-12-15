@@ -1,7 +1,5 @@
 package br.com.devrodrigues.orchestrator.core;
 
-import java.util.Objects;
-
 public class Response {
     private String orderId;
     private String paymentStatus;

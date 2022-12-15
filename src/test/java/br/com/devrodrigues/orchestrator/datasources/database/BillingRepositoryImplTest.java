@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
-import static br.com.devrodrigues.orchestrator.core.State.PROCESSED;
+import static br.com.devrodrigues.orchestrator.core.objectsvalues.State.PROCESSED;
 import static br.com.devrodrigues.orchestrator.fixture.Fixture.getBillingEntity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
