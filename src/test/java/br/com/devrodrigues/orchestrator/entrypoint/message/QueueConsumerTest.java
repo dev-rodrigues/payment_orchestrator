@@ -1,6 +1,6 @@
 package br.com.devrodrigues.orchestrator.entrypoint.message;
 
-import br.com.devrodrigues.orchestrator.service.Orchestrator;
+import br.com.devrodrigues.orchestrator.service.OrchestratorCoordinator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,6 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static br.com.devrodrigues.orchestrator.fixture.Fixture.*;
+import static java.util.concurrent.CompletableFuture.completedFuture;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -19,30 +20,30 @@ import static org.mockito.Mockito.when;
 class QueueConsumerTest {
 
     @MockBean
-    Orchestrator orchestrator;
+    OrchestratorCoordinator orchestrator;
 
     @SpyBean
     QueueConsumer consumer;
 
     @Test
-    void should_receive_valid_payment_request() throws JsonProcessingException {
+    void should_receive_valid_payment_request() {
         // given: a valid external request
         var json = getValidJSONPaymentRequest();
 
         // when:
-        when(orchestrator.startProcess(any())).thenReturn(getOrchestratorResponse());
+        when(orchestrator.start(any())).thenReturn(completedFuture(getOrchestratorResponse()));
 
         // then:
         assertDoesNotThrow(() -> consumer.receiveExternal(json));
     }
 
     @Test
-    void should_receive_valid_payment_response() throws JsonProcessingException {
+    void should_receive_valid_payment_response() {
         // given: a valid external request
         var json = getValidJSONPaymentResponse();
 
         // when:
-        when(orchestrator.mediateProcess(any())).thenReturn(getBillingEntity());
+        when(orchestrator.finish(any())).thenReturn(completedFuture(getBillingEntity()));
 
         // then:
         assertDoesNotThrow(() -> consumer.receiveInternal(json));

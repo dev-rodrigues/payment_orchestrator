@@ -1,7 +1,7 @@
 package br.com.devrodrigues.orchestrator.entrypoint.http;
 
-import br.com.devrodrigues.orchestrator.service.OrchestratorCoordinator;
-import com.google.gson.Gson;
+import br.com.devrodrigues.orchestrator.fixture.Fixture;
+import br.com.devrodrigues.orchestrator.service.BillingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,25 +14,24 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static br.com.devrodrigues.orchestrator.fixture.Fixture.getOrchestratorResponse;
-import static br.com.devrodrigues.orchestrator.fixture.Fixture.getValidRequest;
-import static java.util.concurrent.CompletableFuture.completedFuture;
+import java.util.List;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-class StartApiImplTest {
+class StartedApiImplTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @InjectMocks
-    StartApiImpl controller;
+    StartedApiImpl controller;
 
     @Mock
-    OrchestratorCoordinator orchestrator;
+    BillingService service;
 
-    static final String PATH = "/start";
+    static final String PATH = "/started";
 
     @BeforeEach
     void setup() {
@@ -40,18 +39,15 @@ class StartApiImplTest {
     }
 
     @Test
-    void should_return_204_when_request_is_valid() throws Exception {
-        // given: valid request
-        var request = getValidRequest();
-        var json = new Gson().toJson(request);
+    void should_return_200_and_list_of_billing_when_request_is_valid() throws Exception {
+        var response = Fixture.getBillingEntity();
+        response.setId(1L);
 
-        // when
-        Mockito.when(orchestrator.start(Mockito.any())).thenReturn(completedFuture(getOrchestratorResponse()));
+        Mockito.when(service.findAll()).thenReturn(List.of(response));
 
-        // then
-        mockMvc.perform(MockMvcRequestBuilders.post(PATH, 1)
+        mockMvc.perform(MockMvcRequestBuilders.get(PATH)
                 .contentType(APPLICATION_JSON)
-                .content(json)
-        ).andExpect(status().isNoContent());
+        ).andExpect(status().isOk());
     }
+
 }

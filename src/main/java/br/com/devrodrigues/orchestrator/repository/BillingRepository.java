@@ -10,7 +10,7 @@ public interface BillingRepository {
 
 //    List<BillingEntity> findByOrderId(String orderId);
 
-    BillingEntity findById(Long billingId);
+    BillingEntity findById(Long billingId) throws Exception;
 
     List<BillingEntity> findAll();
 }

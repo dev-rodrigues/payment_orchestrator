@@ -9,6 +9,8 @@ import org.springframework.data.util.Pair;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 import static br.com.devrodrigues.orchestrator.datasources.database.entity.BillingType.of;
 import static br.com.devrodrigues.orchestrator.core.State.WAITING;
@@ -23,7 +25,7 @@ public class BillingBuilder {
     private BigDecimal value;
 
     private String routingKey;
-    private List<String> possibleRoutings;
+    private List<String> possibleRouting;
 
     private BillingBuilder() {
     }
@@ -43,7 +45,7 @@ public class BillingBuilder {
     }
 
     public BillingBuilder possibleRouting(List<String> asList) {
-        this.possibleRoutings = asList;
+        this.possibleRouting = asList;
         return this;
     }
 
@@ -53,8 +55,8 @@ public class BillingBuilder {
         }
 
         switch (this.paymentType) {
-            case CREDIT_CARD -> this.routingKey = this.possibleRoutings.get(0);
-            case SLIP -> this.routingKey = this.possibleRoutings.get(1);
+            case CREDIT_CARD -> this.routingKey = this.possibleRouting.get(0);
+            case SLIP -> this.routingKey = this.possibleRouting.get(1);
             default -> throw new IllegalStateException("Unexpected value: " + this.paymentType);
         }
 
@@ -69,6 +71,10 @@ public class BillingBuilder {
     public BillingBuilder withValue(BigDecimal value) {
         this.value = value;
         return this;
+    }
+
+    public CompletionStage<Pair<BillingEntity, BillingBuilder>> build() {
+        return CompletableFuture.supplyAsync(this::buildStarter);
     }
 
     public Pair<BillingEntity, BillingBuilder> buildStarter() {

@@ -2,11 +2,10 @@ package br.com.devrodrigues.orchestrator.service;
 
 import br.com.devrodrigues.orchestrator.core.ExternalResponse;
 import br.com.devrodrigues.orchestrator.core.IntraQueue;
-import br.com.devrodrigues.orchestrator.core.PaymentRequest;
-import br.com.devrodrigues.orchestrator.core.PaymentType;
-import br.com.devrodrigues.orchestrator.core.build.BillingBuilder;
+import br.com.devrodrigues.orchestrator.core.exceptions.BillingNotFoundException;
+import br.com.devrodrigues.orchestrator.core.exceptions.ParseException;
 import br.com.devrodrigues.orchestrator.datasources.database.entity.BillingEntity;
-import br.com.devrodrigues.orchestrator.repository.BillingRepository;
+import br.com.devrodrigues.orchestrator.fixture.Fixture;
 import br.com.devrodrigues.orchestrator.repository.RabbitRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Assertions;
@@ -19,15 +18,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.math.BigDecimal;
-
-import static br.com.devrodrigues.orchestrator.core.PaymentType.SLIP;
 import static br.com.devrodrigues.orchestrator.fixture.Fixture.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static java.util.concurrent.CompletableFuture.completedFuture;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ContextConfiguration(classes = {Orchestrator.class})
+@ContextConfiguration(classes = {OrchestratorCoordinator.class})
 @ExtendWith(SpringExtension.class)
 @TestPropertySource(properties = {
         "queue.intra.exchange=testValue",
@@ -38,95 +35,83 @@ import static org.mockito.Mockito.*;
 class OrchestratorTest {
 
     @MockBean
-    BillingRepository billingRepository;
+    BillingService service;
+
+    @MockBean
+    RabbitService rabbitService;
 
     @MockBean
     RabbitRepository rabbitRepository;
 
     @SpyBean
-    Orchestrator orchestrator;
+    OrchestratorCoordinator orchestrator;
 
     @Test
-    void should_start_process() throws Exception {
+    void should_start_process() {
 
-        // given: a valid payment request
-        var request = getValidPaymentRequest();
+        when(service.createBilling(any())).thenReturn(completedFuture(getOrchestratorResponse()));
+        when(service.persist(any())).thenReturn(completedFuture(getBillingEntity()));
 
-        // and: calling billing repository
-        when(billingRepository.store(any(BillingEntity.class)))
-                .thenReturn(getStartedBillingEntity());
+        doAnswer((i) -> null).when(rabbitService).sendToExchange(any(), any());
+        doAnswer((i) -> null).when(rabbitService).notifyRequester(any());
 
-        //when
-        var response = orchestrator.startProcess(request);
 
-        //then
-        assertNotNull(response);
-        assertEquals(BillingEntity.class, response.getFirst().getClass());
-        assertEquals(BillingBuilder.class, response.getSecond().getClass());
+        orchestrator.start(getValidPaymentRequest());
 
-        verify(billingRepository, times(1)).store(any(BillingEntity.class));
-        verify(rabbitRepository, times(1)).producerOnExchange(any());
-        verify(rabbitRepository, times(1)).producerOnTopic(any(ExternalResponse.class));
+        verify(service, times(1)).createBilling(any());
+        verify(service, times(1)).persist(any());
+        verify(rabbitService, times(1)).sendToExchange(any(), any());
     }
 
     @Test
-    void should_not_start_process_when_fail_producer_exchange() throws JsonProcessingException {
+    void should_not_start_process_when_fail_producer_exchange() {
 
-        // given: a valid payment request
-        var request = getValidPaymentRequest();
+        when(service.createBilling(any())).thenReturn(completedFuture(getOrchestratorResponse()));
+        when(service.persist(any())).thenReturn(completedFuture(getBillingEntity()));
 
-        // and: calling billing repository
-        when(billingRepository.store(any(BillingEntity.class)))
-                .thenReturn(getStartedBillingEntity());
+        doThrow(ParseException.class).when(rabbitService).sendToExchange(any(), any());
 
-        // and: fail producer exchange
-        doThrow(JsonProcessingException.class).when(rabbitRepository).producerOnExchange(any(IntraQueue.class));
+        orchestrator.start(getValidPaymentRequest());
 
-
-        //then: fail
-        assertThrows(JsonProcessingException.class, () -> orchestrator.startProcess(request));
-
-        verify(rabbitRepository, times(0)).producerOnTopic(any(ExternalResponse.class));
+        verify(rabbitService, times(1)).sendToExchange(any(), any());
+        verify(rabbitService, times(0)).notifyRequester(any());
     }
 
     @Test
-    void should_continue_a_process_when_valid_payment_response() throws Exception {
+    void should_continue_a_process_when_valid_payment_response() {
         // given: a valid payment response
-        var request = getValidPaymentResponse();
+        var response = getValidPaymentResponse();
 
-        // and: calling billing repository
-        when(billingRepository.findById(any()))
-                .thenReturn(getUpdatedBillingEntity());
+        // when: the orchestrator search for a billing
+        when(service.getBillingById(any())).thenReturn(completedFuture(getBillingEntity()));
 
-        // and: calling billing repository
-        when(billingRepository.store(any(BillingEntity.class)))
-                .thenReturn(getUpdatedBillingEntity());
+        // and: the orchestrator update the billing
+        when(service.update(any(), any())).thenReturn(completedFuture(getBillingEntity()));
 
-        //when: calling mediate process
-        var response = orchestrator.mediateProcess(request);
+        // then: the orchestrator send a message to the requester
+        doAnswer((i) -> null).when(rabbitService).notifyRequester(any());
 
-        //then: calling producer on exchange
-        verify(rabbitRepository, times(1)).producerOnTopic(any(ExternalResponse.class));
-
-        //and: not null response
-        assertNotNull(response);
+        orchestrator.finish(response).thenRun(() -> {
+            verify(service, times(1)).getBillingById(any());
+            verify(service, times(1)).update(any(), any());
+            verify(rabbitService, times(1)).notifyRequester(any());
+        });
     }
 
     @Test
-    void should_not_continue_a_process_when_invalid_payment_response() throws Exception {
+    void should_not_continue_a_process_when_invalid_payment_response() {
         // given: a invalid payment response
         var request = getValidPaymentResponse();
 
-        // and: calling billing repository
-        when(billingRepository.findById(any()))
-                .thenReturn(null);
+        // and: the orchestrator search for a billing and throw an billing not found exception
+        doThrow(BillingNotFoundException.class).when(service).getBillingById(any());
 
-        // and: calling billing repository
-        when(billingRepository.store(any(BillingEntity.class)))
-                .thenReturn(null);
-
-
-        //then: throwing exception
-        assertThrows(RuntimeException.class, () -> orchestrator.mediateProcess(request));
+        //then : the orchestrator not update the billing
+        Assertions.assertThrows(BillingNotFoundException.class, () -> orchestrator.finish(request).thenRun(() -> {
+            verify(service, times(1)).getBillingById(any());
+            verify(service, times(0)).update(any(), any());
+            verify(rabbitService, times(0)).notifyRequester(any());
+        }));
     }
+
 }

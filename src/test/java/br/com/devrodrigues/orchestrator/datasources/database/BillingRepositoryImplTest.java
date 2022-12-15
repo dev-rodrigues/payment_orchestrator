@@ -85,4 +85,14 @@ class BillingRepositoryImplTest {
         assertNotNull(response.getId());
         assertEquals(billingEntity.getId(), response.getId());
     }
+
+    @Test
+    void should_return_all_billings() {
+        // when: find billing
+        var response = repository.findAll();
+
+        // then: billing found
+        assertNotNull(response);
+        assertEquals(1, response.size());
+    }
 }

@@ -76,7 +76,7 @@ public class Fixture {
                 .userId("userId")
                 .value(Float.MIN_VALUE);
     }
-
+    
     public static Pair<BillingEntity, BillingBuilder> getOrchestratorResponse() {
         return Pair.of(
                 getBillingEntity(),
