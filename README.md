@@ -10,14 +10,14 @@
 </p>
 
 ## 📝 [Contexto geral](#-contexto-geral)
-Esse serviço, nasceu com a intenção de permitir que a PetFriends disponibilizasse diversas formas de pagamento para seus clientes, e que esses clientes pudessem escolher a forma de pagamento que melhor se encaixasse em suas necessidades.
-Sendo assim, eu decidi que o serviço de pagamento seria apartado do serviço de assinatura, e que a comunicação entre as partes, seria feito através de mensageria. Portanto, o desenho da arquitetura ficou da seguinte forma:  
+Esse serviço, nasceu com a intenção de permitir que a PetFriends disponibilizasse diversas formas de pagamento para seus clientes e que esses clientes pudessem escolher a forma de pagamento que melhor se encaixasse em suas necessidades.
+Sendo assim, eu decidi que o serviço de pagamento seria apartado do serviço de assinatura e que a comunicação entre as partes seria feito por mensageria. Portanto, o desenho da arquitetura ficou da seguinte forma:  
 
 <img width="663" align="center" alt="image" src="https://github.com/dev-rodrigues/arquitetura/blob/main/1.jpeg?raw=true">
 <br/>
 <br/>
-Além disso, service--orchestrator, tem como premissa, implementar o ‘designer’ pattern, chamado Saga, sendo um padrão de projeto de ‘software’ que visa implementar a execução de uma série de ações, de forma distribuída, com o intuito de garantir a consistência das informações, mesmo que ocorra algum erro durante a execução de uma das ações.
-Portanto, o service--orchestrator, é responsável por executar as seguintes ações:
+Além disso, service--orchestrator tem como premissa implementar o ‘designer’ pattern, chamado Saga, sendo um padrão de projeto de ‘software’ que visa implementar a execução de uma série de ações de forma distribuída, com o intuito de garantir a consistência das informações mesmo que ocorra algum erro durante a execução de uma das ações.
+Portanto, o service--orchestrator é responsável por executar as seguintes ações:
 
 - Receber pedidos de pagamento
 - Distribuir os pedidos de pagamento para os serviços responsáveis por cada forma de pagamento
@@ -46,7 +46,7 @@ execução dentro do ambiente cloud.
 - [**H2**](https://www.mongodb.com/home):O banco H2 foi escolhido por ser um banco de dados em memória, que não precisa de instalação, e é muito rápido para ser utilizado em testes.
 
 
-- [**RabbitMQ**](https://www.rabbitmq.com/): Foi utilizado para implementar a comunicação entre os serviços, utilizando o protocolo AMQP.
+- [**RabbitMQ**](https://www.rabbitmq.com/): Foi utilizado para implementar a comunicação entre os serviços utilizando o protocolo AMQP.
 
 ## 🎲 [Rodando a aplicação](#rodando-a-api)
 
@@ -84,7 +84,7 @@ O serviço prove dois endpoints, sendo eles:
 
 Acesse a documentação da API através do path `/swagger-ui/index.html` ou o openapi `/api-documentation`
 
-Para executar o serviço utilizando o RabbitMQ, é necessário enviar uma mensagem na fila `beta.payment.request` utilizando o painel de administração do RabbitMQ. O corpo da mensagem deve ser um JSON, seguindo o seguinte formato:
+Para executar o serviço utilizando o RabbitMQ, é necessário enviar uma mensagem na fila `beta.payment.request` utilizando o painel de administração do RabbitMQ. O corpo da mensagem deve ser um JSON seguindo o seguinte formato:
 ```json
 {
     "orderId": "UUID",
