@@ -14,7 +14,6 @@ public class OrchestratorCoordinator {
     private final BillingService service;
     private final RabbitService rabbitService;
 
-
     public OrchestratorCoordinator(BillingService service,
                                    RabbitService rabbitService) {
         this.service = service;

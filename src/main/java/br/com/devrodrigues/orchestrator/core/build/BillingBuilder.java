@@ -23,7 +23,6 @@ public class BillingBuilder {
     private String orderId;
     private PaymentType paymentType;
     private BigDecimal value;
-
     private String routingKey;
     private List<String> possibleRouting;
 
