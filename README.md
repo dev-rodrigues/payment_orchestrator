@@ -10,22 +10,21 @@
 </p>
 
 ## 📝 [Contexto geral](#-contexto-geral)
-Esse serviço, nasceu com a intenção de permitir que a PetFriends disponibilizasse diversas formas de pagamento para seus clientes e que esses clientes pudessem escolher a forma de pagamento que melhor se encaixasse em suas necessidades.
-Sendo assim, eu decidi que o serviço de pagamento seria apartado do serviço de assinatura e que a comunicação entre as partes seria feito por mensageria. Portanto, o desenho da arquitetura ficou da seguinte forma:  
+Esse serviço nasceu com a intenção de permitir que a PetFriends disponibilizasse diversas formas de pagamento para seus clientes e que esses clientes pudessem escolher a forma de pagamento que melhor se encaixasse em suas necessidades. Sendo assim, eu decidi que o serviço de pagamento seria apartado do serviço de assinatura e que a comunicação entre as partes seria feito por mensageria. Portanto, o desenho da arquitetura ficou da seguinte forma:  
 
 <img width="663" align="center" alt="image" src="https://github.com/dev-rodrigues/arquitetura/blob/main/1.jpeg?raw=true">
 <br/>
 <br/>
-Além disso, service--orchestrator tem como premissa implementar o ‘designer’ pattern, chamado Saga, sendo um padrão de projeto de ‘software’ que visa implementar a execução de uma série de ações de forma distribuída, com o intuito de garantir a consistência das informações mesmo que ocorra algum erro durante a execução de uma das ações.
-Portanto, o service--orchestrator é responsável por executar as seguintes ações:
+Além disso, essa aplicação tem como premissa implementar o ‘designer’ pattern, chamado Saga, sendo um padrão de projeto de ‘software’ que visa implementar a execução de uma série de ações de forma distribuída, com o intuito de garantir a consistência das informações mesmo que ocorra algum erro durante a execução de uma das ações.
+Portanto, o serviço executa as seguintes ações:
 
 - Receber pedidos de pagamento
 - Distribuir os pedidos de pagamento para os serviços responsáveis por cada forma de pagamento
 - Notificar o serviço de assinatura, quando o pagamento for aprovado, reprovado ou pendente
 
 ## :robot: [Deploy](#-deploy)
-O deploy da aplicação, foi feito utilizando o Github Actions. 
-A premissa do pipeline é disponibilizar uma nova versão da imagem da aplicação no Docker Hub para que com o ArgoCD que é um gerenciador de configurações declarativas, gerenciado pelo Kubernetes, possa fazer o deploy da nova versão da aplicação.
+O deploy da aplicação foi feito utilizando o Github Actions.
+A premissa do pipeline é disponibilizar uma nova versão da imagem da aplicação no Docker Hub para que com o ArgoCD, que é um gerenciador de configurações declarativas gerenciado pelo Kubernetes, possa fazer o deploy da nova versão da aplicação.
 
 ## ✅ [Pré-requisitos](#pre-requisitos)
 Nessa aplicação foram utilizadas algumas tecnologias, cada uma delas teve uma importância significativa no projeto, sendo elas:
