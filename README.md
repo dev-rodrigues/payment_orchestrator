@@ -10,7 +10,7 @@
 
 ## 📝 [Contexto geral](#-contexto-geral)
 Esse serviço, nasceu com a intenção de permitir que a PetFriends disponibilizasse diversas formas de pagamento para seus clientes, e que esses clientes pudessem escolher a forma de pagamento que melhor se encaixasse em suas necessidades.
-Sendo assim,eu decidi que o serviço de pagamento seria apartado do serviço de assinatura, e que a comunicação entre as partes, seria feito através de mensageria. Portanto, o desenho da arquitetura ficou da seguinte forma:  
+Sendo assim, eu decidi que o serviço de pagamento seria apartado do serviço de assinatura, e que a comunicação entre as partes, seria feito através de mensageria. Portanto, o desenho da arquitetura ficou da seguinte forma:  
 
 <img width="663" alt="image" src="https://github.com/dev-rodrigues/arquitetura/blob/main/1.jpeg?raw=true">
 <br/>
@@ -35,13 +35,14 @@ Nessa aplicação foram utilizadas algumas tecnologias, cada uma delas teve uma 
 - [**Maven**](https://maven.apache.org/download.cgi): Ferramenta de automação de compilação utilizada para gerenciar as dependências do projeto.
 
 
-- [**Spring Boot**](https://spring.io/projects/spring-boot): Framework utilizado para construir toda a integração da aplicação com o mundo externo, como por exemplo, integração com o banco de dados, integração com o RabbitMQ, integração com o serviço de cliente.
+- [**Spring Boot**](https://spring.io/projects/spring-boot): Framework utilizado para construir toda a integração da aplicação com o mundo externo, como, por exemplo, integração com o banco de dados, integração com o RabbitMQ e com o serviço de cliente.
 
 
-- [**Docker**](https://www.docker.com/): Utilizado para dispinibilizar a aplicação em containers, para que ela possa ser executada em qualquer ambiente independente do sistema operacional.
+- [**Docker**](https://www.docker.com/): Utilizado para dispinibilizar a aplicação em containers, para ela poder ser executada em qualquer ambiente independente do sistema operacional. Além de permitir a
+execução dentro do ambiente cloud.
 
 
-- [**H2**](https://www.mongodb.com/home):O banco H2 foi escolhido por ser um banco de dados em memória, que não precisa de instalação, e que é muito rápido para ser utilizado em testes.
+- [**H2**](https://www.mongodb.com/home):O banco H2 foi escolhido por ser um banco de dados em memória, que não precisa de instalação, e é muito rápido para ser utilizado em testes.
 
 
 - [**RabbitMQ**](https://www.rabbitmq.com/): Foi utilizado para implementar a comunicação entre os serviços, utilizando o protocolo AMQP.
