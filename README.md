@@ -76,3 +76,6 @@ $ docker run -d --name orchestrator -p 8081:8081 httpsantos/payment_orchestrator
 $ docker run --name orchestrator -p 8081:8081 -d httpsantos/payment_orchestrator:2.4
 ```
 
+### Links uteis
+- Serviço de boleto: [URL](https://github.com/dev-rodrigues/payment--slip-service)
+- Arquivos de deployment: [URL](https://github.com/dev-rodrigues/infnet-example-deployment)
