@@ -3,7 +3,7 @@
 
 <p align="center">
  <a href="#contexto-geral">Contexto geral</a> •
- <a href="#arvore-de-pastas">Árvore de pastas</a> •
+ <a href="#deploy">Deploy</a> •
  <a href="#pre-requisitos">Pré-requisitos</a> •
  <a href="#rodando-a-api">Rodando a aplicação</a> •
 </p>
