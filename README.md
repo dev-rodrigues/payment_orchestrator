@@ -12,7 +12,7 @@
 Esse serviço, nasceu com a intenção de permitir que a PetFriends disponibilizasse diversas formas de pagamento para seus clientes, e que esses clientes pudessem escolher a forma de pagamento que melhor se encaixasse em suas necessidades.
 Sendo assim, eu decidi que o serviço de pagamento seria apartado do serviço de assinatura, e que a comunicação entre as partes, seria feito através de mensageria. Portanto, o desenho da arquitetura ficou da seguinte forma:  
 
-<img width="663" alt="image" src="https://github.com/dev-rodrigues/arquitetura/blob/main/1.jpeg?raw=true">
+<img width="663" align="center" alt="image" src="https://github.com/dev-rodrigues/arquitetura/blob/main/1.jpeg?raw=true">
 <br/>
 <br/>
 Além disso, service--orchestrator, tem como premissa, implementar o ‘designer’ pattern, chamado Saga, sendo um padrão de projeto de ‘software’ que visa implementar a execução de uma série de ações, de forma distribuída, com o intuito de garantir a consistência das informações, mesmo que ocorra algum erro durante a execução de uma das ações.
