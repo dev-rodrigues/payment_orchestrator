@@ -75,6 +75,23 @@ $ docker run -d --name orchestrator -p 8081:8081 httpsantos/payment_orchestrator
 # ou então, você baixar a imagem disponibilizada no Docker Hub:
 $ docker run --name orchestrator -p 8081:8081 -d httpsantos/payment_orchestrator:2.4
 ```
+## :dancing_men: [Executando a aplicação](#executando)
+O serviço prove dois endpoints, sendo eles:
+
+- POST /start: Responsável por iniciar o processo de pagamento
+- GET /started: Responsável por listar todos os pedidos de pagamento iniciados com os seus respectivos status
+
+Acesse a documentação da API através do path `/swagger-ui/index.html` ou o openapi `/api-documentation`
+
+Para executar o serviço utilizando o RabbitMQ, é necessário enviar uma mensagem na fila `beta.payment.request` utilizando o painel de administração do RabbitMQ. O corpo da mensagem deve ser um JSON, seguindo o seguinte formato:
+```json
+{
+    "orderId": "UUID",
+    "userId": "UUID",
+    "paymentType": "SLIP, CREDIT_CARD",
+    "value": 100.00
+}
+```
 
 ### Links uteis
 - Serviço de boleto: [URL](https://github.com/dev-rodrigues/payment--slip-service)
