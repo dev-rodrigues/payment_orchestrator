@@ -6,6 +6,7 @@
  <a href="#deploy">Deploy</a> •
  <a href="#pre-requisitos">Pré-requisitos</a> •
  <a href="#rodando-a-api">Rodando a aplicação</a> •
+ <a href="#executando">Executando a aplicação</a> •
 </p>
 
 ## 📝 [Contexto geral](#-contexto-geral)
